@@ -4,10 +4,10 @@ Trabalho final da disciplina de engenharia de dados da SATC
 
 ### Integrantes
 
-- Alex Farias de Abreu Nabo
-- Arthur de Luca Honorato
-- Guilherme Machado Darabas
-- Paulo Roberto Simão 
-- Rubens Scotti Junior
-- Stephan Anthony Marques
-- Matheus Araldi
+* [Arthur de Luca Honorato](https://github.com/arthurdelucahonorato)
+* [Alex Farias de Abreu Nabo](https://github.com/alex-farias)
+* [Guilherme Machado Darabas](https://github.com/gmdarabas)
+* [Mateus Araldi](https://github.com/araldi42)
+* [Paulo Roberto Simão](https://github.com/paulorsimao)
+* [Rubens Scotti Junior](https://github.com/rubensscotti)
+* [Stephan  Anthony  Marques](https://github.com/stephan-anthony)
