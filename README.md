@@ -9,9 +9,14 @@ Serão criados containers para o Apache Airflow (webserver, scheduler, worker e 
 ### Requisitos
 * Ambiente Linux
 * Docker & Docker Compose
+* Ubutu
 
 ## Utilizando WSL2 no Windows
-### 1. Iniciar Repositório dentro do WSL2:
+### 1 - Tenha em sua maquina o Ubunto instalado
+
+Segue o link para documentação https://ubuntu.com/download
+
+### 1.1 Iniciar Repositório dentro do WSL2:
 O repositório deve ser iniciado dentro do WSL2 e no VSCode é necessário instalar a extensão `Remote Development`
 
 
