@@ -1,7 +1,5 @@
 .env
-
+__pycache__/
 # Pastas do Airflow, ainda precisa verificar se alguma delas precisa ser versionada
 logs
-plugins
-dags
-config
+
