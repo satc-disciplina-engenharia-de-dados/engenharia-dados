@@ -105,6 +105,9 @@ services:
       POSTGRES_DB: airflow
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
+      - ${AIRFLOW_PROJ_DIR:-.}/data/criar_banco.sh:/docker-entrypoint-initdb.d/criar_banco.sh
+      - ${AIRFLOW_PROJ_DIR:-.}/data/ddl_criar_banco.sql:/docker-entrypoint-initdb.d/ddl_criar_banco.sql
+      - ${AIRFLOW_PROJ_DIR:-.}/data/dump_seguro.sql:/docker-entrypoint-initdb.d/dump_seguro.sql
     ports:
       - "5432:5432"
     healthcheck:

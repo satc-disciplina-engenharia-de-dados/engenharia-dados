@@ -40,8 +40,10 @@ Para habilitar o docker dentro da WSL é necessário abrir o docker hub no windo
 
 1. Primeiro é necessário criar as pastas conforme a documentação oficial
 ```bash
+cd src
 mkdir -p ./dags ./logs ./plugins ./config
 echo -e "AIRFLOW_UID=$(id -u)" > .env
+cd ..
 ```
 
 2. Iniciar o banco de dados e rodar migrations
@@ -51,7 +53,7 @@ docker compose up airflow-init
 
 3. Iniciar o Airflow
 ```bash
-docker compose up
+docker compose up  -d
 ```
 
 4. Se tudo funcinou corretamente:
