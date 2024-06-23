@@ -1,15 +1,14 @@
+import os
 from delta import *
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, FloatType
 
-# todo: adicionar variáveis de ambiente no container
-S3_ACCESS_KEY = "minioadmin" #os.environ.get("S3_ACCESS_KEY")
-S3_BUCKET = "teste" # os.environ.get("S3_BUCKET")
-S3_SECRET_KEY = "minioadmin" #os.environ.get("S3_SECRET_KEY")
-S3_ENDPOINT = "http://minio:9000" #os.environ.get("S3_ENDPOINT")
+S3_ACCESS_KEY = os.environ.get("S3_ACCESS_KEY")
+S3_BUCKET = "teste"
+S3_SECRET_KEY = os.environ.get("S3_SECRET_KEY")
+S3_ENDPOINT = os.environ.get("S3_ENDPOINT_URL")
 
-## Tutorial datawaybr
 def criar_delta_table():
     print("criar_delta_table")
     # Create SparkSession 
