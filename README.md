@@ -63,6 +63,11 @@ docker compose up  -d
 
 - Uma instância do dbeaver deve estar rodando na porta `8081` onde você deve finalizar as configuraçoes iniciais do dbeaver server
 
+5. MinIO
+- O MinIO será iniciado automaticamente como parte do Docker Compose. Ele estará disponível na porta 9000.
+- Para acessar a interface de administração do MinIO, abra um navegador da web e vá para http://localhost:9000.
+    * username: minioadmin
+    * password: minioadmin
 
 ## Integrantes
 
