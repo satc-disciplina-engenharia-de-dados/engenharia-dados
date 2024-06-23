@@ -14,7 +14,7 @@ from deltalake import write_deltalake
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from utils.Postgres import Postgres
-from utils.Functions import list_data
+from utils.Functions import list_data, create_spark_session
 
 # Load environment variables
 load_dotenv()
@@ -32,7 +32,7 @@ default_args = {
 
 # Initialize the DAG
 dag = DAG(
-    'Bronze Script',
+    'bronze_script',
     default_args=default_args,
     description='Code to move data from Postgres to Minio in the Bronze layer',
     schedule_interval=timedelta(days=1),
@@ -41,29 +41,38 @@ dag = DAG(
 def connect_to_db() -> Postgres:
     '''Connect to the postgres db'''
     connection = Postgres(
-        user=os.getenv('DB_USER'),
-        password=os.getenv('DB_PASSWORD'),
-        db=os.getenv('DB_HOST'),
-        host=os.getenv('DB_HOST'),
-        port=os.getenv('DB_PORT')
+        user= 'airflow', #os.getenv('DB_USER'),
+        password= 'airflow', #os.getenv('DB_PASSWORD'),
+        db= 'seguro', # os.getenv('DB_HOST'),
+        host= 'postgres', #os.getenv('DB_HOST'),
+        port= '5432' #os.getenv('DB_PORT')
     )
     return connection
 
 def list_tables(**kwargs):
     '''List the tables in the database'''
     connection = connect_to_db()
+    connection.connect()
     tables = connection.get_all_tables()
     kwargs['ti'].xcom_push(key='tables', value=tables)
 
 def connect_to_minio() -> Minio:
     '''Connect to the minio server'''
     minio_client = Minio(
-        "localhost:9000",
-        access_key=os.getenv('MINIO_ACCESS_KEY'),
-        secret_key=os.getenv('MINIO_SECRET_KEY'),
+        os.environ.get("S3_ENDPOINT_URL"),
+        access_key=os.environ.get("S3_ACCESS_KEY"),
+        secret_key=os.environ.get("S3_SECRET_KEY"),
         secure=False
     )
     return minio_client
+
+def create_bucket_if_not_exists(minio_client: Minio, bucket_name: str) -> None:
+    '''Insert data into the minio server'''
+    try:
+        if not minio_client.bucket_exists(bucket_name):
+            minio_client.make_bucket(bucket_name)
+    except S3Error as e:
+        raise e
 
 def insert_data_on_minio(minio_client: Minio, bucket_name: str, object_name: str, file_path: str) -> None:
     '''Insert data into the minio server'''
@@ -89,31 +98,34 @@ def process_tables(**kwargs):
     '''Process each table and upload to Minio'''
     tables = kwargs['ti'].xcom_pull(key='tables', task_ids='list_tables')
     connection = connect_to_db()
+    connection.connect()
     minio_client = connect_to_minio()
-    now = datetime.now().strftime('%Y-%m-%d')
-    verify_folders_or_create(tables)
-    for table in tables:
-        data = connection.get_all_data(table)
-        df = pd.DataFrame(data)
-        csv_file_path = f'/tmp/{table}/{table}.csv'
-        df.to_csv(csv_file_path, index=False)
-        df = pd.read_csv(csv_file_path, chunksize=2000)
-        count = 0
-        for chunk in df:
-            json_data = {
-                'data': chunk.to_json(orient='columns'),
-                'date': now
-            }
-            json_file_path = f'/tmp/{table}/{table}_{now}_{count}.json'
-            with open(json_file_path, 'w', encoding='utf-8') as file:
-                file.write(json.dumps(json_data))
-            delta_file_path = f'/tmp/{table}/{table}_{now}_{count}'
-            convert_json_to_delta(json_file_path, delta_file_path)
-            count += 1
-        data_files = list_data(f'/tmp/{table}')
-        for data_file in data_files:
-            if not data_file.endswith('.csv') and not data_file.endswith('.json'):
-                insert_data_on_minio(minio_client, 'bronze', os.path.basename(data_file), data_file)
+    spark = create_spark_session()
+
+    try:
+        for table in tables:
+            table_name = table[0]
+            create_bucket_if_not_exists(minio_client, table_name)
+            print(f"Processing table {table_name}")
+
+            connection.set_table(table_name)
+            data = connection.get_all_data()
+            columns = connection.get_columns()
+
+            if (len(data) > 0):
+                df = spark.createDataFrame(data, columns)
+                save_path = f"s3a://{table_name}/"
+                (
+                    df
+                    .write
+                    .format("delta")
+                    .mode('overwrite')
+                    .save(save_path)
+                )
+
+    finally:
+        spark.stop()
+        print('Finalizou processamento das tabelas')
 
 # Define the tasks
 list_tables_task = PythonOperator(
