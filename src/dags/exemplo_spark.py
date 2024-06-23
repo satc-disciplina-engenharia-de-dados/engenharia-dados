@@ -14,15 +14,14 @@ default_args = {
     'start_date': datetime(2023, 6, 1),
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 1,
-    'retry_delay': timedelta(minutes=5),
+    'retries': 0,
 }
 
 dag = DAG(
     'exemplo_spark',
     default_args=default_args,
     description='Um exemplo de DAG usando apache spark',
-    schedule_interval=timedelta(days=1),
+    schedule_interval=None,
 )
 
 criar_delta_table = PythonOperator(
@@ -30,18 +29,6 @@ criar_delta_table = PythonOperator(
     python_callable=criar_delta_table,
     dag=dag,
 )
-
-# transform_task = PythonOperator(
-#     task_id='transform_task',
-#     python_callable=transform_data,
-#     dag=dag,
-# )
-
-# load_task = PythonOperator(
-#     task_id='load_task',
-#     python_callable=load_data,
-#     dag=dag,
-# )
 
 # extract_task >> transform_task >> load_task
 criar_delta_table
