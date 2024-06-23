@@ -1,4 +1,5 @@
 import os
+import sys
 from datetime import datetime, timedelta
 import json
 from airflow import DAG
@@ -7,6 +8,11 @@ from minio import Minio
 from minio.error import S3Error
 from dotenv import load_dotenv
 import pandas as pd
+import pyarrow as pa
+import pyarrow.json as pajson
+from deltalake import write_deltalake
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 from utils.Postgres import Postgres
 from utils.Functions import list_data
 
@@ -40,7 +46,7 @@ def connect_to_db() -> Postgres:
         db=os.getenv('DB_HOST'),
         host=os.getenv('DB_HOST'),
         port=os.getenv('DB_PORT')
-        )
+    )
     return connection
 
 def list_tables(**kwargs):
@@ -74,6 +80,11 @@ def verify_folders_or_create(tables):
         if not os.path.exists(f'/tmp/{folder}'):
             os.makedirs(f'/tmp/{folder}')
 
+def convert_json_to_delta(json_file_path, delta_file_path):
+    '''Convert JSON file to Delta format'''
+    table = pajson.read_json(json_file_path)
+    write_deltalake(delta_file_path, table)
+
 def process_tables(**kwargs):
     '''Process each table and upload to Minio'''
     tables = kwargs['ti'].xcom_pull(key='tables', task_ids='list_tables')
@@ -96,10 +107,12 @@ def process_tables(**kwargs):
             json_file_path = f'/tmp/{table}/{table}_{now}_{count}.json'
             with open(json_file_path, 'w', encoding='utf-8') as file:
                 file.write(json.dumps(json_data))
+            delta_file_path = f'/tmp/{table}/{table}_{now}_{count}'
+            convert_json_to_delta(json_file_path, delta_file_path)
             count += 1
         data_files = list_data(f'/tmp/{table}')
         for data_file in data_files:
-            if not data_file.endswith('.csv'):
+            if not data_file.endswith('.csv') and not data_file.endswith('.json'):
                 insert_data_on_minio(minio_client, 'bronze', os.path.basename(data_file), data_file)
 
 # Define the tasks
