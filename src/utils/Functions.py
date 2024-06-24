@@ -3,6 +3,8 @@ from pathlib import Path
 from glob import iglob
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
+from minio import Minio
+from minio.error import S3Error
 
 def list_data(path):
     '''List all unprocessed data files in the path
@@ -44,3 +46,21 @@ def create_spark_session():
         .config("spark.hadoop.fs.s3a.secret.key", S3_SECRET_KEY)
         .getOrCreate() 
     )
+
+def create_bucket_if_not_exists(minio_client: Minio, bucket_name: str) -> None:
+    '''Insert data into the minio server'''
+    try:
+        if not minio_client.bucket_exists(bucket_name):
+            minio_client.make_bucket(bucket_name)
+    except S3Error as e:
+        raise e
+
+def connect_to_minio() -> Minio:
+    '''Connect to the minio server'''
+    minio_client = Minio(
+        os.environ.get("S3_ENDPOINT_URL"),
+        access_key=os.environ.get("S3_ACCESS_KEY"),
+        secret_key=os.environ.get("S3_SECRET_KEY"),
+        secure=False
+    )
+    return minio_client
