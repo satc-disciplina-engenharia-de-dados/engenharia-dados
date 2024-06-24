@@ -15,26 +15,26 @@ Serão criados containers para o Apache Airflow (webserver, scheduler, worker e 
 O repositório deve ser iniciado dentro do WSL2 e no VSCode é necessário instalar a extensão `Remote Development`
 
 
-![Remote Delopment](doc_images/ext_vscode.PNG)
+![Remote Delopment](docs/ext_vscode.PNG)
 
 
 ### 2. Abrir o repositório com VSCode
 Abra o repositório através do WSL2 e verifique se o VSCode está conectado (canto inferior esquerdo) conforme mostrado na imagem abaixo:
 
-![conexão wsl](doc_images/wsl_vscode.png)
+![conexão wsl](docs/wsl_vscode.png)
 
 
 ### 3. Verificar Conexão com WSL2:
 Se o repositório não estiver aberto no WSL2, pressione `Ctrl+Shift+P` e procure por "WSL: Reopen Folder", conforme mostrado na imagem a seguir:
 
-![Reabrir com wsl](doc_images/reopen_wsl.png)
+![Reabrir com wsl](docs/reopen_wsl.png)
 
 
 ### 4. Habilitar o docker dentro da WSL
 
 Para habilitar o docker dentro da WSL é necessário abrir o docker hub no windows ir em `Settings` e depois `Resources` > `WSL integration` e ativar a integração com a distro desejada
 
-![Reabrir com wsl](doc_images/integracao_docker_wsl.png)
+![Reabrir com wsl](docs/integracao_docker_wsl.png)
 
 ## Setup do Airflow ([Documentação Oficial](https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html))
 
@@ -71,10 +71,10 @@ docker compose up  -d
 
 ## Integrantes
 
-- Alex Farias de Abreu Nabo
-- Arthur de Luca Honorato
-- Guilherme Machado Darabas
-- Paulo Roberto Simão 
-- Rubens Scotti Junior
-- Stephan Anthony Marques
-- Matheus Araldi
+- [Alex Farias de Abreu Nabo](https://github.com/Alex-Farias)
+- [Arthur de Luca Honorato](https://github.com/Arthurdelucahonorato)
+- [Guilherme Machado Darabas](https://github.com/gmDarabas)
+- [Paulo Roberto Simão](https://github.com/paulorsimao)
+- [Rubens Scotti Junior](https://github.com/rubensscotti)
+- [Stephan Anthony Marques](https://github.com/StephanAnthony)
+- [Matheus Araldi](https://github.com/Araldi42)
