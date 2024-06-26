@@ -125,4 +125,5 @@ Este projeto está sob a licença (sua licença) - veja o arquivo [LICENSE](http
 
 ## Referências
 
-Cite aqui todas as referências utilizadas neste projeto, pode ser outros repositórios, livros, artigos de internet etc.
+Wallace Camargo - https://www.youtube.com/watch?v=nnNxe6gzb-8  
+[rylativity](https://github.com/rylativity) repositorio:pyspark-deltalake-minio - https://github.com/rylativity/pyspark-deltalake-minio 
