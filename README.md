@@ -111,13 +111,13 @@ Fale sobre a versão e o controle de versões para o projeto. Para as versões d
 
 ## Autores
 
-Alex Farias de Abreu Nabo- [Alex Farias de Abreu Nabo](https://github.com/Alex-Farias)
-Arthur de Luca Honorato - [Arthur de Luca Honorato](https://github.com/Arthurdelucahonorato)
-Guilherme Machado Darabas- [Guilherme Machado Darabas](https://github.com/gmDarabas)
-Paulo Roberto Simão- [Paulo Roberto Simão](https://github.com/paulorsimao)
-Rubens Scotti Junior- [Rubens Scotti Junior](https://github.com/rubensscotti)
-Stephan Anthony Marques- [Stephan Anthony Marques](https://github.com/StephanAnthony)
-Matheus Araldi - [Matheus Araldi](https://github.com/Araldi42)
+Alex Farias de Abreu Nabo- (https://github.com/Alex-Farias)  
+Arthur de Luca Honorato -(https://github.com/Arthurdelucahonorato)  
+Guilherme Machado Darabas- (https://github.com/gmDarabas)  
+Paulo Roberto Simão- (https://github.com/paulorsimao)  
+Rubens Scotti Junior- (https://github.com/rubensscotti)  
+Stephan Anthony Marques- (https://github.com/StephanAnthony)  
+Matheus Araldi - (https://github.com/Araldi42)  
 
 ## Licença
 
