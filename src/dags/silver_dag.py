@@ -7,8 +7,15 @@ from airflow.operators.python_operator import PythonOperator
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from utils.Functions import create_spark_session, create_bucket_if_not_exists, connect_to_minio
-from scripts.silver.transformar_pessoa import transformar_pessoa
+
+from scripts.silver.transformar_apolice import transformar_apolice
+from scripts.silver.transformar_cliente import transformar_cliente
+from scripts.silver.transformar_corretor import transformar_corretor
+from scripts.silver.transformar_mobilia import transformar_mobilia
 from scripts.silver.transformar_seguradora import transformar_seguradora
+from scripts.silver.transformar_vistoria import transformar_vistoria
+from scripts.silver.transformar_sinistro import transformar_sinistro
+
 
 # Airflow default arguments
 default_args = {
@@ -50,9 +57,16 @@ def process_tables():
     create_bucket_if_not_exists(minio, silver_bucket)
 
     tasks = [
-        (transformar_pessoa, "pessoa"),
+        (transformar_apolice, "apolice"),
+        #(transformar_cliente, "cliente"),  #TEM QUE VERIFICAR A TABELA, esta dando replace na coluna CPF, porem no banco nao temos a coluna CPF.
+        #(transformar_corretor, "corretor"), #Mesmo esquema da tabela cliente
+        #(transformar_imovel, "imovel"),## 
+        (transformar_mobilia, "mobilia"),
         (transformar_seguradora, "seguradora"),
+        (transformar_sinistro, "sinistro"),
+        (transformar_vistoria, "vistoria")
         # todo: adicionar outras tabelas aqui
+         
     ]
 
     try:
@@ -73,3 +87,12 @@ process_tables_task = PythonOperator(
 
 # Set task dependencies
 process_tables_task
+
+#    transformar_imovel(
+#             spark,
+#             bronze_path_for_table("imovel"), 
+#             silver_path_for_table("imovel"), 
+#             bronze_path_for_table("seguradora"), 
+#             bronze_path_for_table("cliente"),
+#             bronze_path_for_table("pessoa")
+#         )

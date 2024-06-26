@@ -6,7 +6,7 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from scripts.criar_delta_table import criar_delta_table
+import scripts.criar_delta_table import criar_delta_table
 
 default_args = {
     'owner': 'airflow',

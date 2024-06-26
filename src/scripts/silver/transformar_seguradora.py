@@ -1,4 +1,4 @@
-from pyspark.sql.functions import col, concat_ws, current_date, year, regexp_replace
+from pyspark.sql.functions import col, concat_ws, when, current_date, year, regexp_replace
 from pyspark.sql import SparkSession
 
 def transformar_seguradora(spark: SparkSession, bronze_path, silver_path):
