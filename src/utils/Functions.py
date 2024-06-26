@@ -1,5 +1,8 @@
+import os
 from pathlib import Path
 from glob import iglob
+from pyspark import SparkConf, SparkContext
+from pyspark.sql import SparkSession
 
 def list_data(path):
     '''List all unprocessed data files in the path
@@ -21,3 +24,23 @@ def list_data(path):
     data = [fpath for fpath in files]
     data.sort()
     return data
+
+def create_spark_session(): 
+    S3_ACCESS_KEY = os.environ.get("S3_ACCESS_KEY")
+    S3_SECRET_KEY = os.environ.get("S3_SECRET_KEY")
+    S3_ENDPOINT = os.environ.get("S3_ENDPOINT_URL")
+    
+    return ( 
+        SparkSession
+        .builder
+        .master("local[*]")
+        .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:3.3.1,io.delta:delta-core_2.12:2.4.0")
+        .config("driver", "org.postgresql.Driver")
+        .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
+        .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
+        .config("spark.hadoop.fs.s3a.path.style.access", "true")
+        .config("spark.hadoop.fs.s3a.endpoint", "http://" + S3_ENDPOINT)
+        .config("spark.hadoop.fs.s3a.access.key", S3_ACCESS_KEY)
+        .config("spark.hadoop.fs.s3a.secret.key", S3_SECRET_KEY)
+        .getOrCreate() 
+    )

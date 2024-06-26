@@ -63,7 +63,7 @@ class Postgres():
         '''Get all tables in the database'''
         query = "SELECT table_name \
                 FROM information_schema.tables \
-                WHERE table_schema='public' AND table_type='public'"
+                WHERE table_schema='public'"
         self.cursor.execute(query)
         return self.cursor.fetchall()
 
@@ -100,3 +100,10 @@ class Postgres():
         insert_query = sql.SQL(f"INSERT INTO {self.__table} ({collumns}) VALUES " + "%s")
         execute_values(self.cursor, insert_query, data_tuples)
         self.cursor.connection.commit()
+    
+    def get_columns(self):
+        '''Get column names from the table'''
+        query = f"SELECT column_name FROM information_schema.columns WHERE table_name = '{self.__table}'"
+        self.cursor.execute(query)
+        columns = [row[0] for row in self.cursor.fetchall()]
+        return columns
