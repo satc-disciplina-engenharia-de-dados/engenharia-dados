@@ -15,7 +15,7 @@ from scripts.silver.transformar_mobilia import transformar_mobilia
 from scripts.silver.transformar_seguradora import transformar_seguradora
 from scripts.silver.transformar_vistoria import transformar_vistoria
 from scripts.silver.transformar_sinistro import transformar_sinistro
-
+from scripts.silver.transformar_imovel import transformar_imovel
 
 # Airflow default arguments
 default_args = {
@@ -61,6 +61,14 @@ def process_tables():
         #(transformar_cliente, "cliente"),  #TEM QUE VERIFICAR A TABELA, esta dando replace na coluna CPF, porem no banco nao temos a coluna CPF.
         #(transformar_corretor, "corretor"), #Mesmo esquema da tabela cliente
         #(transformar_imovel, "imovel"),## 
+        (transformar_imovel(
+            spark,
+            bronze_path_for_table("imovel"), 
+            silver_path_for_table("imovel"), 
+            bronze_path_for_table("seguradora"), 
+            bronze_path_for_table("cliente"),
+            bronze_path_for_table("pessoa")
+                            ),"imovel"),
         (transformar_mobilia, "mobilia"),
         (transformar_seguradora, "seguradora"),
         (transformar_sinistro, "sinistro"),
