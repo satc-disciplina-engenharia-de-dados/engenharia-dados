@@ -5,10 +5,12 @@ def transformar_sinistro(spark: SparkSession, bronze_path, silver_path):
     # Validar valor de prejuízo
     df_bronze = df_bronze.withColumn('valor_prejuizo', when(col('valor_prejuizo') < 0, None).otherwise(col('valor_prejuizo')))
 
+    # Selecionar colunas relevantes
     df_silver = df_bronze.select('id_sinistro', 'id_imovel', 'data_ocorrencia', 'descricao', 'valor_prejuizo')
 
     df_silver.show(5)
 
+    # Salvar como tabela Silver
     (
         df_silver
         .write
