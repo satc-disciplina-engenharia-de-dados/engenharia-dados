@@ -1,20 +1,26 @@
-from pyspark.sql.functions import col, concat_ws,  when,current_date, year, regexp_replace
+from pyspark.sql.functions import col, concat_ws, when, current_date, year, regexp_replace, round
 from pyspark.sql import SparkSession
 
-def transformar_cliente(spark: SparkSession, bronze_path, silver_path):
+def transformar_cliente(spark: SparkSession, bronze_path, silver_path, path_bronze_pessoa):
     print("Iniciando transformacao da tabela cliente")
-    df_bronze = spark.read.format("delta").load(bronze_path)
+    df_bronze_cliente = spark.read.format("delta").load(bronze_path)
+    df_bronze_pessoa = spark.read.format("delta").load(path_bronze_pessoa)
 
-    # Limpeza de CPF e criação de endereço completo
-    df_bronze = df_bronze.withColumn('cpf', regexp_replace('cpf', '[^0-9]', ''))
-    df_bronze = df_bronze.withColumn('endereco_completo', concat_ws(', ', 'rua', 'numero', 'bairro', 'cidade', 'estado', 'cep'))
+    # Renomeia colunas para evitar conflitos no join
+    df_bronze_cliente = (
+        df_bronze_cliente.join(df_bronze_pessoa, df_bronze_cliente.id_pessoa == df_bronze_pessoa.id_pessoa, how='left')
+        .select('id_cliente', 'nome', 'cpf', 'email', 'telefone')
+    )
+    df_bronze_cliente = df_bronze_cliente.withColumnRenamed('nome', 'nome_pessoa_cliente') \
+                                        .withColumnRenamed('telefone', 'telefone_pessoa_cliente')\
+                                        .withColumnRenamed('cpf', 'cpf_pessoa_cliente')\
+                                        .withColumnRenamed('email', 'email_pessoa_cliente')
 
-    # Selecionar colunas relevantes
-    df_silver = df_bronze.select('id_cliente', 'id_pessoa', 'nome', 'cpf', 'telefone', 'email', 'data_nasc', 'endereco_completo')
+    df_silver = df_bronze_cliente
 
     df_silver.show(5)
 
-    # Salvar como tabela Silver
+
     (
         df_silver
         .write
