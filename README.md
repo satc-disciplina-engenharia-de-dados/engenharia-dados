@@ -10,9 +10,8 @@ Serão criados containers para o Apache Airflow (webserver, scheduler, worker e 
 
 ## Desenho de Arquitetura
 
-Coloqui uma imagem do seu projeto, como no exemplo abaixo:
+![Reabrir com wsl](docs/imgModeloCompletoAtual2.0.png)
 
-![image](https://github.com/jlsilva01/projeto-ed-satc/assets/484662/541de6ab-03fa-49b3-a29f-dec8857360c1)
 
 ### Requisitos
 * Ambiente Linux
@@ -111,13 +110,13 @@ Fale sobre a versão e o controle de versões para o projeto. Para as versões d
 
 ## Autores
 
-Alex Farias de Abreu Nabo- [Alex Farias de Abreu Nabo](https://github.com/Alex-Farias)
-Arthur de Luca Honorato - [Arthur de Luca Honorato](https://github.com/Arthurdelucahonorato)
-Guilherme Machado Darabas- [Guilherme Machado Darabas](https://github.com/gmDarabas)
-Paulo Roberto Simão- [Paulo Roberto Simão](https://github.com/paulorsimao)
-Rubens Scotti Junior- [Rubens Scotti Junior](https://github.com/rubensscotti)
-Stephan Anthony Marques- [Stephan Anthony Marques](https://github.com/StephanAnthony)
-Matheus Araldi - [Matheus Araldi](https://github.com/Araldi42)
+Alex Farias de Abreu Nabo- (https://github.com/Alex-Farias)  
+Arthur de Luca Honorato -(https://github.com/Arthurdelucahonorato)  
+Guilherme Machado Darabas- (https://github.com/gmDarabas)  
+Paulo Roberto Simão- (https://github.com/paulorsimao)  
+Rubens Scotti Junior- (https://github.com/rubensscotti)  
+Stephan Anthony Marques- (https://github.com/StephanAnthony)  
+Matheus Araldi - (https://github.com/Araldi42)  
 
 ## Licença
 
@@ -125,4 +124,5 @@ Este projeto está sob a licença (sua licença) - veja o arquivo [LICENSE](http
 
 ## Referências
 
-Cite aqui todas as referências utilizadas neste projeto, pode ser outros repositórios, livros, artigos de internet etc.
+Wallace Camargo - https://www.youtube.com/watch?v=nnNxe6gzb-8  
+[rylativity](https://github.com/rylativity) repositorio:pyspark-deltalake-minio - https://github.com/rylativity/pyspark-deltalake-minio 
