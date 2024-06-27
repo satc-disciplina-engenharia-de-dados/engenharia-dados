@@ -7,8 +7,15 @@ from airflow.operators.python_operator import PythonOperator
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from utils.Functions import create_spark_session, create_bucket_if_not_exists, connect_to_minio
-from scripts.silver.transformar_pessoa import transformar_pessoa
+
+from scripts.silver.transformar_apolice import transformar_apolice
+from scripts.silver.transformar_cliente import transformar_cliente
+from scripts.silver.transformar_corretor import transformar_corretor
+from scripts.silver.transformar_mobilia import transformar_mobilia
 from scripts.silver.transformar_seguradora import transformar_seguradora
+from scripts.silver.transformar_vistoria import transformar_vistoria
+from scripts.silver.transformar_sinistro import transformar_sinistro
+from scripts.silver.transformar_imovel import transformar_imovel
 
 # Airflow default arguments
 default_args = {
@@ -50,9 +57,12 @@ def process_tables():
     create_bucket_if_not_exists(minio, silver_bucket)
 
     tasks = [
-        (transformar_pessoa, "pessoa"),
+        (transformar_apolice, "apolice"),
+        (transformar_mobilia, "mobilia"),
+        (transformar_apolice, "apolice"),
         (transformar_seguradora, "seguradora"),
-        # todo: adicionar outras tabelas aqui
+        (transformar_sinistro, "sinistro"),
+        (transformar_vistoria, "vistoria")
     ]
 
     try:
@@ -60,8 +70,32 @@ def process_tables():
             bronze_path = bronze_path_for_table(table_name)
             silver_path = silver_path_for_table(table_name)
             process_table(transformation_func, spark, bronze_path, silver_path)
+
+        transformar_cliente(
+            spark, 
+            bronze_path_for_table("cliente"),
+            silver_path_for_table("cliente"),
+            bronze_path_for_table("pessoa")
+        )
+
+        transformar_corretor(
+            spark, 
+            bronze_path_for_table("corretor"),
+            silver_path_for_table("corretor"),
+            bronze_path_for_table("pessoa")
+        )
+
+        transformar_imovel(
+            spark,
+            bronze_path_for_table("imovel"), 
+            silver_path_for_table("imovel"), 
+            bronze_path_for_table("seguradora"), 
+            bronze_path_for_table("cliente"),
+            bronze_path_for_table("pessoa")
+        )
     finally:
         spark.stop()
+
 
 # Define the tasks
 process_tables_task = PythonOperator(
@@ -73,3 +107,4 @@ process_tables_task = PythonOperator(
 
 # Set task dependencies
 process_tables_task
+
