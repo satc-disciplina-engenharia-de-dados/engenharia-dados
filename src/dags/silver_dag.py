@@ -57,24 +57,14 @@ def process_tables():
     create_bucket_if_not_exists(minio, silver_bucket)
 
     tasks = [
-        (transformar_apolice, "apolice"),
-        #(transformar_cliente, "cliente"),  #TEM QUE VERIFICAR A TABELA, esta dando replace na coluna CPF, porem no banco nao temos a coluna CPF.
-        #(transformar_corretor, "corretor"), #Mesmo esquema da tabela cliente
-        #(transformar_imovel, "imovel"),## 
-        (transformar_imovel(
-            spark,
-            bronze_path_for_table("imovel"), 
-            silver_path_for_table("imovel"), 
-            bronze_path_for_table("seguradora"), 
-            bronze_path_for_table("cliente"),
-            bronze_path_for_table("pessoa")
-                            ),"imovel"),
+    
         (transformar_mobilia, "mobilia"),
+        (transformar_apolice, "apolice"),
         (transformar_seguradora, "seguradora"),
         (transformar_sinistro, "sinistro"),
         (transformar_vistoria, "vistoria")
         # todo: adicionar outras tabelas aqui
-         
+        
     ]
 
     try:
@@ -82,8 +72,32 @@ def process_tables():
             bronze_path = bronze_path_for_table(table_name)
             silver_path = silver_path_for_table(table_name)
             process_table(transformation_func, spark, bronze_path, silver_path)
+
+        transformar_imovel(
+            spark,
+            bronze_path_for_table("imovel"), 
+            silver_path_for_table("imovel"), 
+            bronze_path_for_table("seguradora"), 
+            bronze_path_for_table("cliente"),
+            bronze_path_for_table("pessoa")
+        )
+        transformar_cliente(
+            spark,
+            bronze_path_for_table("cliente"), 
+            silver_path_for_table("cliente"), 
+            bronze_path_for_table("pessoa")
+        )
+        # transformar_corretor(
+        #     spark,
+        #     bronze_path_for_table("corretor"), 
+        #     silver_path_for_table("corretor"), 
+        #     bronze_path_for_table("pessoa")
+        # )
+
+
     finally:
         spark.stop()
+
 
 # Define the tasks
 process_tables_task = PythonOperator(
@@ -96,11 +110,3 @@ process_tables_task = PythonOperator(
 # Set task dependencies
 process_tables_task
 
-#    transformar_imovel(
-#             spark,
-#             bronze_path_for_table("imovel"), 
-#             silver_path_for_table("imovel"), 
-#             bronze_path_for_table("seguradora"), 
-#             bronze_path_for_table("cliente"),
-#             bronze_path_for_table("pessoa")
-#         )
