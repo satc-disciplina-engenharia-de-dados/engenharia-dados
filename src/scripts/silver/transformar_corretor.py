@@ -1,20 +1,29 @@
-from pyspark.sql.functions import col, concat_ws,  when,current_date, year, regexp_replace
+from pyspark.sql.functions import col, concat_ws, regexp_replace
 from pyspark.sql import SparkSession
 
-def transformar_corretor(spark: SparkSession, bronze_path, silver_path):
+def transformar_corretor(spark: SparkSession, bronze_path, silver_path, path_bronze_pessoa):
     print("Iniciando transformacao da tabela corretor")
-    df_bronze = spark.read.format("delta").load(bronze_path)
+    df_bronze_corretor = spark.read.format("delta").load(bronze_path)
+    df_bronze_pessoa = spark.read.format("delta").load(path_bronze_pessoa)
+     
+    var = df_bronze_corretor.withColumnRenamed('id_pessoa', 'corretor_id_pessoa')
 
-    # Limpeza de CNPJ e criação de endereço completo
-    df_bronze = df_bronze.withColumn('cnpj', regexp_replace('cnpj', '[^0-9]', ''))
-    df_bronze = df_bronze.withColumn('endereco_completo', concat_ws(', ', 'rua', 'numero', 'bairro', 'cidade', 'estado', 'cep'))
+    print(var)
+    # Renomeia colunas para evitar conflitos no join
+    df_bronze_corretor = (
+        df_bronze_corretor.join(df_bronze_pessoa, var.corretor_id_pessoa == df_bronze_pessoa.id_pessoa, how='left')
+        .select('id_cliente', 'nome', 'cpf', 'email', 'telefone')
+    )
+    df_bronze_corretor = df_bronze_corretor.withColumnRenamed('nome', 'nome_pessoa_corretor') \
+                                           .withColumnRenamed('telefone', 'telefone_pessoa_corretor') \
+                                           .withColumnRenamed('email', 'email_pessoa_corretor') 
+                                                                                    
 
-    # Selecionar colunas relevantes
-    df_silver = df_bronze.select('id_seguradora', 'id_pessoa', 'nome', 'cnpj', 'razao_social', 'telefone', 'email', 'endereco_completo')
+    df_silver = df_bronze_corretor
 
     df_silver.show(5)
+ 
 
-    # Salvar como tabela Silver
     (
         df_silver
         .write
@@ -22,4 +31,5 @@ def transformar_corretor(spark: SparkSession, bronze_path, silver_path):
         .mode('overwrite')
         .save(silver_path)
     )
+    
     print("Transformacao da tabela corretor finalizada")
