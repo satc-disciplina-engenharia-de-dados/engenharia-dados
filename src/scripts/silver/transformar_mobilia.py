@@ -1,11 +1,11 @@
-from pyspark.sql.functions import col, concat_ws,  when,current_date, year, regexp_replace
+from pyspark.sql.functions import col, concat_ws,  when,current_date, year, regexp_replace, round
 from pyspark.sql import SparkSession
  
 def transformar_mobilia(spark: SparkSession, bronze_path, silver_path):
     print("Iniciando transformacao da tabela mobilia")
     df_bronze = spark.read.format("delta").load(bronze_path)
 
-    # Selecionar colunas relevantes e validar valores
+    df_silver = df_bronze.withColumn('valor', round('valor', 2))
     df_silver = df_bronze.select('id_mobilia', 'id_imovel', 'nome', 'valor')
 
     df_silver.show(5)
