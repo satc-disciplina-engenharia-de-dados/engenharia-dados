@@ -59,6 +59,7 @@ def process_tables():
     tasks = [
         (transformar_apolice, "apolice"),
         (transformar_mobilia, "mobilia"),
+        (transformar_apolice, "apolice"),
         (transformar_seguradora, "seguradora"),
         (transformar_sinistro, "sinistro"),
         (transformar_vistoria, "vistoria")
@@ -95,6 +96,7 @@ def process_tables():
     finally:
         spark.stop()
 
+
 # Define the tasks
 process_tables_task = PythonOperator(
     task_id='process_tables',
@@ -106,11 +108,3 @@ process_tables_task = PythonOperator(
 # Set task dependencies
 process_tables_task
 
-#    transformar_imovel(
-#             spark,
-#             bronze_path_for_table("imovel"), 
-#             silver_path_for_table("imovel"), 
-#             bronze_path_for_table("seguradora"), 
-#             bronze_path_for_table("cliente"),
-#             bronze_path_for_table("pessoa")
-#         )

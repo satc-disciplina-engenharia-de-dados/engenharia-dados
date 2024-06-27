@@ -1,4 +1,4 @@
-from pyspark.sql.functions import col, concat_ws,  when,current_date, year, regexp_replace
+from pyspark.sql.functions import col, concat_ws, when, current_date, year, regexp_replace, round
 from pyspark.sql import SparkSession
 
 def transformar_corretor(spark: SparkSession, bronze_path, silver_path, bronze_path_pessoa):
@@ -19,6 +19,7 @@ def transformar_corretor(spark: SparkSession, bronze_path, silver_path, bronze_p
     df_silver = df_bronze.select('id_seguradora', 'id_pessoa', 'nome', 'cpf', 'telefone', 'email', 'data_nasc', 'idade', 'endereco_completo')
 
     df_silver.show(5)
+ 
 
     (
         df_silver
@@ -27,4 +28,5 @@ def transformar_corretor(spark: SparkSession, bronze_path, silver_path, bronze_p
         .mode('overwrite')
         .save(silver_path)
     )
+    
     print("Transformacao da tabela corretor finalizada")
