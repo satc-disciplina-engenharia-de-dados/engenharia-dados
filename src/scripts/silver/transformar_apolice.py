@@ -11,6 +11,24 @@ def transformar_apolice(spark: SparkSession, bronze_path, silver_path):
 
     df_silver = df_bronze.select('id_apolice', 'id_imovel', 'id_corretor_pessoa', 'id_corretor_seguradora', 'data_inicio', 'data_fim', 'valor_cobertura')
 
+    df_silver = df_bronze.select(
+        'id_apolice', 
+        'id_imovel', 
+        'id_corretor_pessoa',
+        'id_corretor_seguradora',
+        'data_inicio',
+        'data_fim',
+        'valor_cobertura',
+        dayofmonth(col('data_inicio')).alias('dia_inicio'),
+        month(col('data_inicio')).alias('mes_inicio'),
+        year(col('data_inicio')).alias('ano_inicio'),
+        quarter(col('data_inicio')).alias('trimestre_inicio'),
+        dayofmonth(col('data_fim')).alias('dia_fim'),
+        month(col('data_fim')).alias('mes_fim'),
+        year(col('data_fim')).alias('ano_fim'),
+        quarter(col('data_fim')).alias('trimestre_fim')
+    )
+
     df_silver.show(5)
 
     (

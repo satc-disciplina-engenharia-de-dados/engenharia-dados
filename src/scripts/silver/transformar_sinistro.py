@@ -1,4 +1,4 @@
-from pyspark.sql.functions import col, concat_ws,  when,current_date, year, regexp_replace
+from pyspark.sql.functions import col, concat_ws, when, current_date, year, regexp_replace, dayofmonth, month, quarter
 from pyspark.sql import SparkSession
 
 def transformar_sinistro(spark: SparkSession, bronze_path, silver_path):
@@ -10,6 +10,18 @@ def transformar_sinistro(spark: SparkSession, bronze_path, silver_path):
 
     # Selecionar colunas relevantes
     df_silver = df_bronze.select('id_sinistro', 'id_imovel', 'data_ocorrencia', 'descricao', 'valor_prejuizo')
+
+    df_silver = df_bronze.select(
+        'id_sinistro', 
+        'id_imovel', 
+        'data_ocorrencia', 
+        'descricao', 
+        'valor_prejuizo',
+        dayofmonth(col('data_ocorrencia')).alias('dia'),
+        month(col('data_ocorrencia')).alias('mes'),
+        year(col('data_ocorrencia')).alias('ano'),
+        quarter(col('data_ocorrencia')).alias('trimestre')
+    )
 
     df_silver.show(5)
 
