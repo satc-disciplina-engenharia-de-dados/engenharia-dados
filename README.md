@@ -1,15 +1,24 @@
 # Engenharia de Dados
 
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Trabalho final da disciplina de engenharia de dados da SATC
 
 # Instruções para Rodar o Docker Compose
 
 Serão criados containers para o Apache Airflow (webserver, scheduler, worker e database), Redis, Postgres e para o CloudBeaver
 
+## Desenho de Arquitetura
+
+Coloqui uma imagem do seu projeto, como no exemplo abaixo:
+
+![image](https://github.com/jlsilva01/projeto-ed-satc/assets/484662/541de6ab-03fa-49b3-a29f-dec8857360c1)
+
 ### Requisitos
 * Ambiente Linux
 * Docker & Docker Compose
 
+# Instalação
 ## Utilizando WSL2 no Windows
 ### 1. Iniciar Repositório dentro do WSL2:
 O repositório deve ser iniciado dentro do WSL2 e no VSCode é necessário instalar a extensão `Remote Development`
@@ -69,12 +78,51 @@ docker compose up  -d
     * username: minioadmin
     * password: minioadmin
 
-## Integrantes
+## Ferramentas utilizadas
 
-- [Alex Farias de Abreu Nabo](https://github.com/Alex-Farias)
-- [Arthur de Luca Honorato](https://github.com/Arthurdelucahonorato)
-- [Guilherme Machado Darabas](https://github.com/gmDarabas)
-- [Paulo Roberto Simão](https://github.com/paulorsimao)
-- [Rubens Scotti Junior](https://github.com/rubensscotti)
-- [Stephan Anthony Marques](https://github.com/StephanAnthony)
-- [Matheus Araldi](https://github.com/Araldi42)
+Mencione as ferramentas que você usou para criar seu projeto
+
+* Ferramenta 1 + link - Breve descrição
+* Ferramenta 2 + link - Breve descrição
+* Ferramenta 3 + link - Breve descrição
+
+## Colaboração
+
+Por favor, leia o [COLABORACAO](https://gist.github.com/usuario/colaboracao.md) para obter detalhes sobre o nosso código de conduta e o processo para nos enviar pedidos de solicitação.
+
+Se desejar publicar suas modificações em um repositório remoto no GitHub, siga estes passos:
+
+1. Crie um novo repositório vazio no GitHub.
+2. No terminal, navegue até o diretório raiz do projeto.
+3. Execute os seguintes comandos:
+
+```bash
+git remote set-url origin https://github.com/seu-usuario/nome-do-novo-repositorio.git
+git add .
+git commit -m "Adicionar minhas modificações"
+git push -u origin master
+```
+
+Isso configurará o repositório remoto e enviará suas modificações para lá.
+
+## Versão
+
+Fale sobre a versão e o controle de versões para o projeto. Para as versões disponíveis, observe as [tags neste repositório](https://github.com/suas/tags/do/projeto). 
+
+## Autores
+
+Alex Farias de Abreu Nabo- [Alex Farias de Abreu Nabo](https://github.com/Alex-Farias)
+Arthur de Luca Honorato - [Arthur de Luca Honorato](https://github.com/Arthurdelucahonorato)
+Guilherme Machado Darabas- [Guilherme Machado Darabas](https://github.com/gmDarabas)
+Paulo Roberto Simão- [Paulo Roberto Simão](https://github.com/paulorsimao)
+Rubens Scotti Junior- [Rubens Scotti Junior](https://github.com/rubensscotti)
+Stephan Anthony Marques- [Stephan Anthony Marques](https://github.com/StephanAnthony)
+Matheus Araldi - [Matheus Araldi](https://github.com/Araldi42)
+
+## Licença
+
+Este projeto está sob a licença (sua licença) - veja o arquivo [LICENSE](https://github.com/jlsilva01/projeto-ed-satc/blob/main/LICENSE) para detalhes.
+
+## Referências
+
+Cite aqui todas as referências utilizadas neste projeto, pode ser outros repositórios, livros, artigos de internet etc.
