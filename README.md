@@ -10,9 +10,8 @@ Serão criados containers para o Apache Airflow (webserver, scheduler, worker e 
 
 ## Desenho de Arquitetura
 
-Coloqui uma imagem do seu projeto, como no exemplo abaixo:
+![Reabrir com wsl](docs/imgModeloCompletoAtual2.0.png)
 
-![image](https://github.com/jlsilva01/projeto-ed-satc/assets/484662/541de6ab-03fa-49b3-a29f-dec8857360c1)
 
 ### Requisitos
 * Ambiente Linux
