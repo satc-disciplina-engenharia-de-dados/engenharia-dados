@@ -1,4 +1,4 @@
-from pyspark.sql.functions import col, concat_ws, when, current_date, year, regexp_replace, round
+from pyspark.sql.functions import col, concat_ws, when, current_date, year, regexp_replace, round, dayofmonth, month, quarter
 from pyspark.sql import SparkSession
 
 def transformar_apolice(spark: SparkSession, bronze_path, silver_path):
@@ -11,6 +11,24 @@ def transformar_apolice(spark: SparkSession, bronze_path, silver_path):
 
     df_silver = df_bronze.withColumn('valor_cobertura', round('valor_cobertura', 2))
     df_silver = df_bronze.select('id_apolice', 'id_imovel', 'id_corretor_pessoa', 'id_corretor_seguradora', 'data_inicio', 'data_fim', 'valor_cobertura')
+
+    df_silver = df_bronze.select(
+        'id_apolice', 
+        'id_imovel', 
+        'id_corretor_pessoa',
+        'id_corretor_seguradora',
+        'data_inicio',
+        'data_fim',
+        'valor_cobertura',
+        dayofmonth(col('data_inicio')).alias('dia_inicio'),
+        month(col('data_inicio')).alias('mes_inicio'),
+        year(col('data_inicio')).alias('ano_inicio'),
+        quarter(col('data_inicio')).alias('trimestre_inicio'),
+        dayofmonth(col('data_fim')).alias('dia_fim'),
+        month(col('data_fim')).alias('mes_fim'),
+        year(col('data_fim')).alias('ano_fim'),
+        quarter(col('data_fim')).alias('trimestre_fim')
+    )
 
     df_silver.show(5)
 
