@@ -9,6 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.Functions import create_spark_session, create_bucket_if_not_exists, connect_to_minio
 
 from scripts.gold.dim_cliente import criar_dim_cliente
+from scripts.gold.dim_tempo import criar_dim_tempo
 from scripts.gold.dim_corretor import criar_dim_corretor
 from scripts.gold.dim_imovel import criar_dim_imovel
 from scripts.gold.dim_seguradora import criar_dim_seguradora
@@ -26,7 +27,7 @@ default_args = {
 
 # Initialize the DAG
 dag = DAG(
-    'silver_script',
+    'gold_script',
     default_args=default_args,
     description='Code to move data from Silver layer to Gold layer',
     schedule_interval=timedelta(days=1),
@@ -62,6 +63,10 @@ def process_tables():
         print('------ iniciando dim_corretor ---------')
         criar_dim_corretor(spark)
         print('------ finalizando dim_corretor -------')
+
+        print('------ iniciando dim_tempo ---------')
+        criar_dim_tempo(spark)
+        print('------ finalizando dim_tempo -------')
 
 
         print('------ iniciando fato_sinistro ---------')
